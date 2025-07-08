@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const cron = require("node-cron");         // ✅ Don't forget this
-const fetch = require("node-fetch");       // ✅ If you’re pinging a URL
 
 const app = express();
 app.use(cors());
