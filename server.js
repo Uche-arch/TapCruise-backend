@@ -58,5 +58,27 @@ app.post("/api/reactions", async (req, res) => {
   res.json(result);
 });
 
+
+// ✅ Health check / keep-alive route
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// ✅ Start server and cron job
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+
+  // ✅ node-cron self-ping every 4 minutes
+  cron.schedule("*/4 * * * *", async () => {
+    try {
+      const res = await fetch("https://tapcruise-backend.onrender.com/ping"); // replace with actual live backend URL
+      const text = await res.text();
+      console.log(`[Self-Ping] ✅ ${text} at ${new Date().toLocaleTimeString()}`);
+    } catch (err) {
+      console.error(`[Self-Ping] ❌ Failed: ${err.message}`);
+    }
+  });
+});
